@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Tutorial de @petrusjuca: como montar Reels de fala real + prova com o Claude Code, com prompts prontos e o CLAUDE.md para copiar.">
+<meta property="og:title" content="Fala e Prova — por @petrusjuca">
+<meta property="og:description" content="Passo a passo para fazer vídeos curtos com a fala real de um político e o que a desmente, com fonte e data em cada corte.">
+<meta property="og:type" content="article">
+<title>Fala e Prova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: coluna única de leitura, passos numerados em sequência real, blocos de prompt com botão de copiar */
+:root {
+  --bg: #f6f7f8;
+  --paper: #ffffff;
+  --ink: #15181c;
+  --muted: #5b636d;
+  --line: #dde1e6;
+  --mark: #ffd600;
+  --mark-ink: #15181c;
+  --stop: #c4161c;
+  --stop-bg: #fdecec;
+  --code-bg: #eef1f4;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101214; --paper: #171a1e; --ink: #eceef1; --muted: #9aa3ad; --line: #2a2f35;
+    --mark: #ffd600; --mark-ink: #101214; --stop: #ff6b6b; --stop-bg: #2a1517; --code-bg: #1e2227;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101214; --paper: #171a1e; --ink: #eceef1; --muted: #9aa3ad; --line: #2a2f35;
+  --mark: #ffd600; --mark-ink: #101214; --stop: #ff6b6b; --stop-bg: #2a1517; --code-bg: #1e2227;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6; }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 80px; }
+header { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.kicker { font-family: var(--f-display); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-size: 15px; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(44px, 9vw, 72px); line-height: .95; margin: 0; text-transform: uppercase; text-wrap: balance; }
+h1 .hl { background: var(--mark); color: var(--mark-ink); padding: 0 .12em; }
+.lede { color: var(--muted); font-size: 19px; max-width: 62ch; margin: 0; }
+h2 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 32px; line-height: 1.05; margin: 0; text-wrap: balance; }
+h3 { font-size: 18px; margin: 0; }
+p, ul, ol { margin: 0; }
+section { display: grid; gap: 16px; padding-block: 36px; border-bottom: 1px solid var(--line); }
+.step-head { display: flex; align-items: baseline; gap: 14px; }
+.num { font-family: var(--f-display); font-weight: 800; font-size: 32px; line-height: 1; min-width: 1.4em; color: var(--muted); font-variant-numeric: tabular-nums; }
+ul, ol { padding-left: 1.2em; display: grid; gap: 6px; }
+li { max-width: 65ch; }
+.note { font-size: 15px; color: var(--muted); }
+.prompt { background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; display: grid; min-width: 0; }
+.prompt-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.prompt-label { font-family: var(--f-display); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; color: var(--muted); }
+.prompt pre { margin: 0; padding: 14px; white-space: pre-wrap; word-break: break-word; font-family: var(--f-mono); font-size: 14px; line-height: 1.55; overflow-x: auto; }
+.prompt.long pre { max-height: 460px; overflow-y: auto; }
+button.copy { font-family: var(--f-body); font-weight: 700; font-size: 14px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); border-radius: 4px; padding: 5px 12px; cursor: pointer; }
+button.copy:hover { background: var(--mark); color: var(--mark-ink); border-color: var(--mark); }
+button.copy:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+.stop { background: var(--stop-bg); border-left: 4px solid var(--stop); padding: 16px 18px; display: grid; gap: 10px; }
+.stop h3 { color: var(--stop); text-transform: uppercase; font-family: var(--f-display); font-size: 22px; letter-spacing: .03em; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.tbl { overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .05em; font-size: 14px; color: var(--muted); }
+code { font-family: var(--f-mono); font-size: .88em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+.check { list-style: none; padding-left: 0; }
+.check li { padding-left: 30px; position: relative; }
+.check li::before { content: ""; position: absolute; left: 0; top: .32em; width: 16px; height: 16px; border: 2px solid var(--ink); border-radius: 2px; }
+.author { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-top: 6px; }
+.author a { color: var(--ink); font-weight: 700; text-decoration: none; border-bottom: 3px solid var(--mark); }
+.author a:hover { background: var(--mark); color: var(--mark-ink); }
+.author .note { margin: 0; }
+.invite { background: var(--ink); color: var(--bg); padding: 24px 22px; display: grid; gap: 12px; border-radius: 4px; }
+.invite h2 { color: var(--bg); }
+.invite p { max-width: 60ch; }
+.invite a { color: var(--mark); font-weight: 700; font-size: 22px; font-family: var(--f-display); letter-spacing: .02em; text-decoration: none; }
+.invite a:hover { text-decoration: underline; }
+footer { padding-top: 28px; color: var(--muted); font-size: 15px; display: grid; gap: 8px; }
+footer a { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Método criado por @petrusjuca · Claude Code · Reels e TikTok</div>
+    <h1>Fala e <span class="hl">Prova</span></h1>
+    <p class="lede">Como fazer vídeos curtos que mostram a fala real de um político e, logo em seguida, o que a desmente, com fonte e data em cada corte. O Claude pesquisa, baixa, corta, tira os prints e monta. Você decide o que entra e confere antes de postar.</p>
+    <div class="author">
+      <span>Por <a href="https://www.instagram.com/petrusjuca/" target="_blank" rel="noopener">@petrusjuca</a> no Instagram</span>
+      <span class="note">Dúvidas, me chama no direct.</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="step-head"><span class="num">1</span><h2>O que você precisa</h2></div>
+    <ul>
+      <li><strong>Um computador</strong> (Mac ou Windows). Essa parte não roda no celular.</li>
+      <li><strong>Assinatura paga do Claude</strong> (Pro ou Max). Ela inclui o Claude Code, que é a versão do Claude que consegue mexer em arquivos, baixar coisas e rodar programas no seu computador.</li>
+      <li><strong>O app do Claude para desktop</strong>, em <code>claude.ai/download</code>. Depois de instalar, abra e entre na aba <strong>Code</strong>.</li>
+      <li><strong>Umas 2 horas</strong> para o primeiro vídeo. Depois que tudo está instalado, bem menos.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">2</span><h2>Preparar o computador</h2></div>
+    <ol>
+      <li>Crie uma pasta só para isso, por exemplo <code>Documentos/reels</code>.</li>
+      <li>No Claude Code, abra essa pasta (ele pergunta qual pasta usar ao iniciar uma sessão).</li>
+      <li>Copie o <strong>direcionamento</strong> da seção 8 desta página, cole no Claude e escreva antes: <em>"Salva o texto abaixo num arquivo CLAUDE.md nesta pasta."</em> O Claude lê esse arquivo sempre que você abre a pasta e passa a seguir as regras dele.</li>
+      <li>Peça para instalar as ferramentas:</li>
+    </ol>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-install">Copiar</button></div>
+<pre id="p-install">Instala pra mim o que precisa pra esse projeto: yt-dlp (baixar vídeo), ffmpeg (cortar e montar vídeo) e o whisper com modelo em português (transcrever fala com o tempo de cada palavra). Eu não sou programador: me diz o que cada coisa faz em uma linha e me avisa quando estiver tudo pronto.</pre>
+    </div>
+    <p class="note">Ele vai pedir permissão antes de rodar cada comando. Pode aprovar. Se for Mac, ele pode precisar instalar o Homebrew primeiro e pedir a senha do computador: essa senha você digita no Terminal, nunca no chat.</p>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">3</span><h2>Pesquisar</h2></div>
+    <p>É a etapa que decide se o vídeo se sustenta. O Claude monta um dossiê e classifica cada item pela força da prova.</p>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-pesquisa">Copiar</button></div>
+<pre id="p-pesquisa">Pesquisa as falas e polêmicas do [NOME DO POLÍTICO]. Só vale como prova: agência de checagem (Aos Fatos, Lupa, Estadão Verifica, UOL Confere, Comprova), decisão judicial, documento oficial ou vídeo/post original dele. Pra cada item me dá: a frase exata, a data, onde foi dita, o link e a força da prova (comprovado / precisa achar o original / não usar). Me avisa também o que circula por aí e é falso. Salva tudo em DOSSIE.md.</pre>
+    </div>
+    <p>Leia o dossiê e escolha de 5 a 7 itens. Os melhores são os em que <strong>ele mesmo se contradiz</strong>: fala uma coisa e depois o contrário, ou fala algo que uma checagem classificou como falso.</p>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">4</span><h2>Baixar e achar as frases</h2></div>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-baixar">Copiar</button></div>
+<pre id="p-baixar">Desses itens do dossiê: [LISTE OS QUE ESCOLHEU]. Acha os vídeos originais (de preferência no canal do próprio veículo), baixa em 1080p na pasta clipes/, transcreve e me diz o segundo exato em que cada frase começa e termina. Me mostra a transcrição de cada trecho pra eu conferir.</pre>
+    </div>
+    <p class="note">Se o vídeo só existir em texto (um post apagado, uma entrevista de jornal), ele vira print na etapa seguinte.</p>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">5</span><h2>Tirar os prints</h2></div>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-prints">Copiar</button></div>
+<pre id="p-prints">Tira print das páginas das checagens e matérias que desmentem cada fala, salvando em prints/. Tem que ser captura da página real, com o nome do veículo e a data aparecendo. Me mostra cada print.</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">6</span><h2>Montar o vídeo</h2></div>
+    <p>O formato que funciona é <strong>fala e prova</strong>: o trecho dele, e logo depois o que desmente. Sem narração. A voz dele é o que prende.</p>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-montar">Copiar</button></div>
+<pre id="p-montar">Monta um vídeo vertical 1080x1920, 30fps, de uns 60 segundos. Estrutura: abre com a fala mais forte dele (o gancho), depois cada fala seguida da prova que desmente. Vídeo na faixa do meio, título curto em cima, fonte e data embaixo de cada corte, legenda grande com a palavra falada em destaque. Cartão "FALSO" só quando a checagem diz falso, citando quem checou. Fecha com um número forte do dossiê. Sem música. Áudio normalizado em -14 LUFS. Me mostra uma folha com um quadro de cada parte antes de exportar.</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">7</span><h2>Conferir antes de postar</h2></div>
+    <p>Não pule esta etapa. No primeiro vídeo que fiz assim, a IA errou a porcentagem do 1º turno (pegou um número de apuração parcial), a data de um áudio e várias palavras da legenda. Só apareceu porque pedi para ela conferir de novo.</p>
+    <div class="prompt">
+      <div class="prompt-bar"><span class="prompt-label">Cole no Claude</span><button class="copy" type="button" data-target="p-conferir">Copiar</button></div>
+<pre id="p-conferir">Tá tudo certo? Você não inventou nada? Confere de novo cada número, data e nome do vídeo direto na fonte original, não no resumo da busca. Me lista o que conferiu, o que corrigiu e o que não conseguiu conferir. Me avisa também se algum corte deixou de fora contexto que muda o sentido (ele se corrigindo, ou uma explicação logo depois).</pre>
+    </div>
+    <ul class="check">
+      <li>Assisti o vídeo inteiro com som.</li>
+      <li>Cada legenda bate com o que ele fala, palavra por palavra.</li>
+      <li>Todo corte tem fonte e data.</li>
+      <li>Nenhum número veio de apuração parcial ou de resumo.</li>
+      <li>Nenhum texto chama alguém de criminoso sem condenação.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="stop">
+      <h3>O que nunca fazer</h3>
+      <ul>
+        <li><strong>Gerar voz ou rosto com IA</strong> de qualquer pessoa. Deepfake em propaganda eleitoral é proibido pelo TSE.</li>
+        <li><strong>Juntar pedaços de uma fala</strong> para formar frase que a pessoa não disse. Cada corte é um trecho contínuo.</li>
+        <li><strong>Recriar print</strong> de post apagado. Use a matéria que noticiou o post.</li>
+        <li><strong>Impulsionar com dinheiro.</strong> Pessoa física não pode pagar impulsionamento de conteúdo eleitoral.</li>
+        <li><strong>Postar o mesmo vídeo em várias contas.</strong> As redes derrubam isso como ação coordenada. Cada um faz e posta o seu.</li>
+        <li><strong>Usar música com direitos.</strong> Escolha o som dentro do próprio app.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="step-head"><span class="num">8</span><h2>Direcionamento para o seu Claude</h2></div>
+    <p>Este é o texto que vai no arquivo <code>CLAUDE.md</code> (passo 2). Ele faz o Claude seguir as regras sem você precisar repetir.</p>
+    <div class="prompt long">
+      <div class="prompt-bar"><span class="prompt-label">CLAUDE.md</span><button class="copy" type="button" data-target="p-claudemd">Copiar</button></div>
+<pre id="p-claudemd"># Projeto: vídeos curtos "fala e prova"
+# Método Fala e Prova, criado por @petrusjuca (instagram.com/petrusjuca)
+
+Você me ajuda a fazer Reels e TikToks que mostram falas reais de políticos e o que as desmente, sempre com fonte. Eu não sou programador: explique em português simples, em passos numerados, e faça as coisas por mim. Antes de rodar algo que apaga ou sobrescreve arquivo, me pergunte.
+
+## Regras que não podem ser quebradas
+1. Nada inventado. Toda fala tem que existir em vídeo, áudio ou post original. Se o original não for encontrado, a fala fica de fora, e você me avisa.
+2. Fonte e data em todo corte e em todo cartão do vídeo.
+3. Para desmentir, só vale: agência de checagem (Aos Fatos, Lupa, Estadão Verifica, UOL Confere, Comprova), decisão judicial, documento oficial (TSE, Diário Oficial) ou o próprio político se contradizendo. Veículo com posição declarada, de qualquer lado, serve só como pista, nunca como prova.
+4. Nunca juntar pedaços de uma fala para formar uma frase que a pessoa não disse. Cada corte é um trecho contínuo. Não alterar velocidade, tom ou conteúdo do áudio dela.
+5. Nunca gerar voz, rosto ou imagem de uma pessoa real com IA.
+6. Nunca chamar alguém de criminoso, ladrão ou condenado sem condenação. Descreva o fato ("foi denunciado", "o caso foi arquivado por prescrição") e mostre a prova.
+7. Prints são sempre captura da página real. Nunca recriar print de post apagado: usar a matéria que noticiou o post.
+8. Classifique cada item do dossiê: comprovado / precisa achar o original / não usar. Me avise quando algo que circula nas redes é falso, mesmo que seja contra o político.
+9. Contexto: se no mesmo trecho a pessoa se corrige ou dá uma explicação relevante, me avise e me deixe decidir se entra.
+10. Números de eleição: usar sempre o resultado final do TSE, nunca o da apuração parcial.
+
+## Fluxo de trabalho
+1. Pesquisa: DOSSIE.md com frase exata, data, onde foi dita, link e força da prova.
+2. Download: yt-dlp para clipes/, em 1080p, de preferência do canal original do veículo. Guardar o .info.json de cada vídeo (tem a data de publicação).
+3. Transcrição palavra por palavra com tempo (whisper). Achar o segundo exato de cada frase. Cortes começam e terminam em fim de palavra, com uma pequena folga.
+4. Prints: captura das páginas com o Chrome em modo headless, em prints/. Fechar ou recortar pop-ups de cookies.
+5. Montagem: 1080x1920, 30fps. Vídeo horizontal na faixa do meio, título curto em cima, fonte e data embaixo, legenda grande. Cartão "FALSO" só quando a checagem diz falso, citando quem checou. Sem música. Áudio igualado entre os trechos e normalizado em -14 LUFS.
+6. Conferência obrigatória antes de me entregar: reconferir cada número, data e nome direto na fonte original (não no resumo da busca), revisar a legenda palavra por palavra contra a transcrição e montar uma folha com um quadro de cada parte. Me dizer o que conferiu, o que corrigiu e o que não conseguiu conferir.
+
+## Problemas conhecidos
+- yt-dlp com erro 403: tentar --extractor-args "youtube:player_client=web_embedded". Os clientes android e web_safari baixam sem erro, mas só em 360p.
+- Vídeo baixado em AV1/Opus não abre em vários editores no Mac: converter para H.264/AAC com ffmpeg antes de montar.
+- Legenda automática erra nomes próprios. Sempre revisar.
+- Página capturada com pop-up de cookies fica escurecida: recortar ou ajustar o contraste.
+
+## Período eleitoral
+- Não sugerir impulsionamento pago (pessoa física não pode impulsionar conteúdo eleitoral).
+- Não sugerir postar o mesmo vídeo em várias contas.
+- Música: não usar faixa com direitos; eu escolho o som no app.</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="invite">
+      <h2>Quer aprender a fazer?</h2>
+      <p>Estou ensinando esse método para quem quer produzir conteúdo político com fonte, sem inventar nada. Se você travou em algum passo ou quer montar o seu primeiro vídeo junto comigo, me chama no direct.</p>
+      <a href="https://www.instagram.com/petrusjuca/" target="_blank" rel="noopener">@petrusjuca</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Método usado no Reels "Flávio vs Flávio" (out/2026). As ferramentas mudam rápido: se algum passo travar, cole a mensagem de erro no próprio Claude e peça para ele resolver.</p>
+    <p>© 2026 @petrusjuca. Todos os direitos reservados. Pode compartilhar o link desta página à vontade. Para reproduzir, adaptar ou usar este material em curso, aula ou conteúdo pago, peça autorização antes.</p>
+  </footer>
+</div>
+
+<script>
+document.querySelectorAll("button.copy").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function () { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1600); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Selecionado: use Copiar do sistema";
+      setTimeout(function () { btn.textContent = "Copiar"; }, 2400);
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+    } catch (e) { fallback(); }
+  });
+});
+</script>
+</body>
+</html>
