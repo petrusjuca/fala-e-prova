@@ -80,6 +80,9 @@ code { font-family: var(--f-mono); font-size: .88em; background: var(--code-bg);
 .author a { color: var(--ink); font-weight: 700; text-decoration: none; border-bottom: 3px solid var(--mark); }
 .author a:hover { background: var(--mark); color: var(--mark-ink); }
 .author .note { margin: 0; }
+.about { display: grid; gap: 14px; }
+.about p { max-width: 65ch; }
+.about .sign { font-weight: 700; }
 footer { padding-top: 28px; color: var(--muted); font-size: 15px; display: grid; gap: 8px; }
 footer a { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -97,6 +100,14 @@ footer a { color: var(--muted); }
       <span class="note">Dúvidas, me chama no direct.</span>
     </div>
   </header>
+
+  <section class="about">
+    <h2>Sobre este tutorial</h2>
+    <p>Trabalho há um bom tempo com automação de edição de vídeo: legendas, cortes, transcrição e montagem. O sistema que uso no dia a dia é mais completo do que o que está aqui. Ele tem regras próprias que fui ajustando com o tempo, modelos de machine learning trabalhando juntos (um modelo de linguagem que pesquisa e decide os cortes, outro que transcreve a fala palavra por palavra) e etapas de conferência que fui criando depois de cada erro.</p>
+    <p>Postei o Reels como um teste e não esperava a repercussão. Muita gente perguntou como fazer, então separei aqui o essencial: o suficiente para você fazer o seu primeiro vídeo com o mesmo cuidado.</p>
+    <p>Gostaria que isso fosse mais democrático. Escrevi o passo a passo para o Claude porque é o que eu uso, mas a lógica serve para qualquer IA que consiga mexer em arquivos e rodar programas no computador. O que importa são as regras: só fala real, fonte em tudo e conferência antes de postar. Se você adaptar para outra IA, me conta como ficou.</p>
+    <p class="sign">@petrusjuca</p>
+  </section>
 
   <section>
     <div class="step-head"><span class="num">1</span><h2>O que você precisa</h2></div>
